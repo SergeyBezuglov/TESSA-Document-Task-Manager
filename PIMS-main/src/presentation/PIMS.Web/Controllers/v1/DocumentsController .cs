@@ -4,17 +4,28 @@ using PIMS.Domain;
 
 namespace PIMS.Web.Controllers.v1
 {
+    /// <summary>
+    /// Контроллер для управления документами.
+    /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
     public class DocumentsController : ControllerBase
     {
         private readonly IDocumentRepository _documentRepository;
 
+        /// <summary>
+        /// Конструктор контроллера документов.
+        /// </summary>
+        /// <param name="documentRepository">Репозиторий документов.</param>
         public DocumentsController(IDocumentRepository documentRepository)
         {
             _documentRepository = documentRepository;
         }
 
+        /// <summary>
+        /// Получает список всех документов.
+        /// </summary>
+        /// <returns>Список документов.</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Document>>> GetDocuments()
         {
@@ -22,6 +33,11 @@ namespace PIMS.Web.Controllers.v1
             return Ok(documents);
         }
 
+        /// <summary>
+        /// Получает документ по ID.
+        /// </summary>
+        /// <param name="id">ID документа.</param>
+        /// <returns>Документ.</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Document>> GetDocument(string id)
         {
@@ -34,6 +50,11 @@ namespace PIMS.Web.Controllers.v1
             return Ok(document);
         }
 
+        /// <summary>
+        /// Создает новый документ.
+        /// </summary>
+        /// <param name="document">Документ для создания.</param>
+        /// <returns>Созданный документ.</returns>
         [HttpPost]
         public async Task<ActionResult<Document>> PostDocument([FromBody] Document document)
         {
@@ -57,6 +78,12 @@ namespace PIMS.Web.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// Обновляет существующий документ.
+        /// </summary>
+        /// <param name="id">ID документа для обновления.</param>
+        /// <param name="document">Обновленный документ.</param>
+        /// <returns>Результат операции.</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutDocument(string id, [FromBody] Document document)
         {
@@ -69,6 +96,11 @@ namespace PIMS.Web.Controllers.v1
             return NoContent();
         }
 
+        /// <summary>
+        /// Удаляет документ по ID.
+        /// </summary>
+        /// <param name="id">ID документа для удаления.</param>
+        /// <returns>Результат операции.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteDocument(string id)
         {

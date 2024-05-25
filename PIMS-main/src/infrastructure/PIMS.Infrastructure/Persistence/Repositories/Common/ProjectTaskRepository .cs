@@ -19,18 +19,28 @@ namespace PIMS.Infrastructure.Persistence.Repositories.Common
             _context = context;
         }
 
+        /// <summary>
+        /// Получение всех задач
+        /// </summary>
         public async Task<IEnumerable<ProjectTask>> GetAllTasksAsync()
         {
             return await _context.ProjectTasks.ToListAsync();
         }
 
+        /// <summary>
+        /// Получение задачи по идентификатору
+        /// </summary>
         public async Task<ProjectTask> GetTaskByIdAsync(string id)
         {
             return await _context.ProjectTasks.FindAsync(id);
         }
 
+        /// <summary>
+        ///  Добавление новой задачи
+        /// </summary>
         public async Task<ProjectTask> AddTaskAsync(ProjectTask task)
         {
+            // Проверка на наличие задачи с таким же ID
             if (_context.ProjectTasks.Any(t => t.ID == task.ID))
             {
                 throw new InvalidOperationException("Task with the same ID already exists.");
@@ -41,6 +51,9 @@ namespace PIMS.Infrastructure.Persistence.Repositories.Common
             return task;
         }
 
+        /// <summary>
+        /// Обновление существующей задачи
+        /// </summary>
         public async Task<ProjectTask> UpdateTaskAsync(ProjectTask task)
         {
             var existingTask = await _context.ProjectTasks.FindAsync(task.ID);
@@ -54,6 +67,9 @@ namespace PIMS.Infrastructure.Persistence.Repositories.Common
             return existingTask;
         }
 
+        /// <summary>
+        /// Удаление задачи по идентификатору
+        /// </summary>
         public async Task DeleteTaskAsync(string id)
         {
             var task = await _context.ProjectTasks.FindAsync(id);

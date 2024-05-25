@@ -50,9 +50,13 @@ namespace PIMS.Infrastructure.Persistence.DbContexts
         /// </summary>
         /// <value>Значение набора баз данных (DbSet).</value>
         public DbSet<EventLog> EventLog { get; set; } = null!;
-
+        /// <summary>
+        /// Таблица документов.
+        /// </summary>
         public DbSet<Document> Documents { get; set; } = null!;
-
+        /// <summary>
+        /// Таблица задач проектов.
+        /// </summary>
         public DbSet<ProjectTask> ProjectTasks { get; set; } = null!;
         /// <summary>
         /// Создание модели.

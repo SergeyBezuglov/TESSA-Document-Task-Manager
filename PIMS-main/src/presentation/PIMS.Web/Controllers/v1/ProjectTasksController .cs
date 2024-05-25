@@ -4,17 +4,28 @@ using PIMS.Domain;
 
 namespace PIMS.Web.Controllers.v1
 {
+    /// <summary>
+    /// Контроллер для управления задачами проектов.
+    /// </summary>
     [ApiController]
     [Route("api/v1/[controller]")]
     public class ProjectTasksController : ControllerBase
     {
         private readonly IProjectTaskRepository _taskRepository;
 
+        /// <summary>
+        /// Конструктор контроллера задач проектов.
+        /// </summary>
+        /// <param name="taskRepository">Репозиторий задач проектов.</param>
         public ProjectTasksController(IProjectTaskRepository taskRepository)
         {
             _taskRepository = taskRepository;
         }
 
+        /// <summary>
+        /// Получает список всех задач проектов.
+        /// </summary>
+        /// <returns>Список задач проектов.</returns>
         [HttpGet]
         public async Task<IActionResult> GetTasks()
         {
@@ -26,6 +37,11 @@ namespace PIMS.Web.Controllers.v1
             return Ok(tasks);
         }
 
+        /// <summary>
+        /// Получает задачу проекта по ID.
+        /// </summary>
+        /// <param name="id">ID задачи проекта.</param>
+        /// <returns>Задача проекта.</returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetTask(string id)
         {
@@ -38,6 +54,11 @@ namespace PIMS.Web.Controllers.v1
             return Ok(task);
         }
 
+        /// <summary>
+        /// Создает новую задачу проекта.
+        /// </summary>
+        /// <param name="task">Задача проекта для создания.</param>
+        /// <returns>Созданная задача проекта.</returns>
         [HttpPost]
         public async Task<IActionResult> PostTask([FromBody] ProjectTask task)
         {
@@ -61,6 +82,12 @@ namespace PIMS.Web.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// Обновляет существующую задачу проекта.
+        /// </summary>
+        /// <param name="id">ID задачи проекта для обновления.</param>
+        /// <param name="task">Обновленная задача проекта.</param>
+        /// <returns>Результат операции.</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTask(string id, [FromBody] ProjectTask task)
         {
@@ -84,6 +111,11 @@ namespace PIMS.Web.Controllers.v1
             }
         }
 
+        /// <summary>
+        /// Удаляет задачу проекта по ID.
+        /// </summary>
+        /// <param name="id">ID задачи проекта для удаления.</param>
+        /// <returns>Результат операции.</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(string id)
         {
