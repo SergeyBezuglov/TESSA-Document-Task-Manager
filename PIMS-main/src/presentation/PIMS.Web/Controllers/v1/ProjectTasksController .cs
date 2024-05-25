@@ -19,6 +19,10 @@ namespace PIMS.Web.Controllers.v1
         public async Task<IActionResult> GetTasks()
         {
             var tasks = await _taskRepository.GetAllTasksAsync();
+            if (tasks == null || !tasks.Any())
+            {
+                return NoContent();
+            }
             return Ok(tasks);
         }
 
@@ -28,7 +32,7 @@ namespace PIMS.Web.Controllers.v1
             var task = await _taskRepository.GetTaskByIdAsync(id);
             if (task == null)
             {
-                return NotFound();
+                return NotFound($"Task with ID {id} not found.");
             }
 
             return Ok(task);
@@ -51,6 +55,10 @@ namespace PIMS.Web.Controllers.v1
             {
                 return Conflict(ex.Message);
             }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while processing your request: " + ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
@@ -61,21 +69,37 @@ namespace PIMS.Web.Controllers.v1
                 return BadRequest("Task ID mismatch.");
             }
 
-            await _taskRepository.UpdateTaskAsync(task);
-            return NoContent();
+            try
+            {
+                await _taskRepository.UpdateTaskAsync(task);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return NotFound($"Task with ID {id} not found.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while processing your request: " + ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTask(string id)
         {
-            var task = await _taskRepository.GetTaskByIdAsync(id);
-            if (task == null)
+            try
             {
-                return NotFound();
+                await _taskRepository.DeleteTaskAsync(id);
+                return NoContent();
             }
-
-            await _taskRepository.DeleteTaskAsync(id);
-            return NoContent();
+            catch (InvalidOperationException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while processing your request: " + ex.Message);
+            }
         }
     }
 }

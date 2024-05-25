@@ -38,18 +38,17 @@ namespace PIMS.Web
         AddVersionedApiExplorerExtension().
         AddSwaggerGenExtension();
 
-            
+
             services.AddControllersWithViews().AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
                 options.JsonSerializerOptions.WriteIndented = true;
-
-                // serialize enums as strings in api responses (e.g. Role)
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-
-                // ignore omitted parameters on models to enable optional params (e.g. User update)
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-            }); 
+
+                // Добавляем поддержку циклических ссылок
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+            });
 
             services.AddSpaStaticFiles(options =>
             {

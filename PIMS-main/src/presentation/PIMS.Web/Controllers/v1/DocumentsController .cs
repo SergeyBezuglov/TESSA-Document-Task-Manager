@@ -42,8 +42,19 @@ namespace PIMS.Web.Controllers.v1
                 return BadRequest("Document is null.");
             }
 
-            await _documentRepository.AddDocumentAsync(document);
-            return CreatedAtAction(nameof(GetDocument), new { id = document.ID }, document);
+            try
+            {
+                await _documentRepository.AddDocumentAsync(document);
+                return CreatedAtAction(nameof(GetDocument), new { id = document.ID }, document);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return Conflict(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
         }
 
         [HttpPut("{id}")]

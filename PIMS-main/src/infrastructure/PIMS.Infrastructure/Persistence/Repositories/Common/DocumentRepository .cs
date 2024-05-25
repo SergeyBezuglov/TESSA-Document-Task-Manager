@@ -31,25 +31,24 @@ namespace PIMS.Infrastructure.Persistence.Repositories.Common
 
         public async Task<Document> AddDocumentAsync(Document document)
         {
-            _context.Documents.Add(document);
+            _context.ChangeTracker.Clear();  // Очистка контекста перед добавлением нового документа
 
-            foreach (var task in document.Tasks)
+            if (document.Tasks != null)
             {
-                var existingTask = await _context.ProjectTasks.FindAsync(task.ID);
-                if (existingTask != null)
+                foreach (var task in document.Tasks)
                 {
-                    // Если задача уже существует в базе данных, используем ее
-                    task.DocumentID = document.ID;
-                    _context.Entry(task).State = EntityState.Modified; // Изменяем состояние на Modified, чтобы обновить существующую задачу
-                }
-                else
-                {
-                    // Если задачи нет в базе данных, добавляем ее
-                    task.DocumentID = document.ID;
-                    _context.Entry(task).State = EntityState.Added;
+                    if (_context.ProjectTasks.Any(t => t.ID == task.ID))
+                    {
+                        _context.Entry(task).State = EntityState.Modified;  // Обновление существующей задачи
+                    }
+                    else
+                    {
+                        _context.ProjectTasks.Add(task);  // Добавление новой задачи
+                    }
                 }
             }
 
+            _context.Documents.Add(document);
             await _context.SaveChangesAsync();
             return document;
         }
