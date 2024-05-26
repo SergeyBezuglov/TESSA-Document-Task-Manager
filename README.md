@@ -83,4 +83,18 @@
 <p>Хранение Задачи в БД</p>
 <img src="https://github.com/SergeyBezuglov/TESSA-Document-Task-Manager/assets/143338316/d1dcc5aa-c2a5-487d-b331-e1d193b37b85"/>
 <p>Хранение Документа в БД</p>
-<h1>На этом все.Спасибо вам за проявленое терпение чтения моего файла . Надеюсь вам понравиться моя работа!!! </h1>
+<h1>Код на клиентской стороне </h1>
+<img src="https://github.com/SergeyBezuglov/TESSA-Document-Task-Manager/assets/143338316/042c5347-e11c-4437-8d44-a71d1bd00529"/>
+<p>Код клиента часть 1</p>
+<img src="https://github.com/SergeyBezuglov/TESSA-Document-Task-Manager/assets/143338316/cba0ca6c-d4f9-436d-aadd-6113a1eec2eb"/>
+<p>Код клиента часть 2. Использую <b>axios</b> для связи методов серверной части </p>
+<img src="https://github.com/SergeyBezuglov/TESSA-Document-Task-Manager/assets/143338316/b0b0c2ca-1612-4457-9e1f-8f64b7ef5d15"/>
+<p>Код клиента часть 3</p>
+<img src="https://github.com/SergeyBezuglov/TESSA-Document-Task-Manager/assets/143338316/9434de29-a564-486a-a8fb-1c3c93a90a2f"/>
+<p>Код клиента часть 4. Здесь пердставленный методы которые , принимают значения с серверной части , и работают с ними . Если нужно удаляют задачи , или создают документы/задачи</p>
+<img src="https://github.com/SergeyBezuglov/TESSA-Document-Task-Manager/assets/143338316/098a5fc6-5c7b-49f4-a085-122244a637b0"/>
+<p>Код клиента часть 5</p>
+<img src="https://github.com/SergeyBezuglov/TESSA-Document-Task-Manager/assets/143338316/f29148ad-d3ef-44cb-8c98-d07f70e92146"/>
+<p>Код клиента часть 6. Здесь пердставлены стили , с помощью которых мой клиент становится  более менее красивым</p>
+<h1>На этом все. Спасибо вам за проявленое терпение чтения моего файла . Надеюсь вам понравиться моя работа!!! </h1>
+ <img src="https://github.com/SergeyBezuglov/TESSA-Document-Task-Manager/assets/143338316/3974eab5-447e-4bb4-b37a-0d53644f22d2"/>
