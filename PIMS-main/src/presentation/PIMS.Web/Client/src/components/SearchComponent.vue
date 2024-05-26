@@ -131,8 +131,8 @@ export default {
         },
         async completeTask(taskId) {
     if (!taskId) {
-        console.error('Task ID is undefined');
-        alert('Task ID is undefined or incorrect');
+        console.error('Идентификатор задачи не определен');
+        alert('Идентификатор задачи не определен или неверен');
         return;
     }
 
@@ -156,8 +156,8 @@ export default {
 
 async cancelTask(taskId) {
     if (!taskId) {
-        console.error('Task ID is undefined');
-        alert('Task ID is undefined or incorrect');
+        console.error('Идентификатор задачи не определен');
+        alert('Идентификатор задачи не определен');
         return;
     }
 
