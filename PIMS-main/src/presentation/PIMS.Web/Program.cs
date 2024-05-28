@@ -1,26 +1,9 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Options;
 using Nest;
 using PIMS.Application;
 using PIMS.Infrastructure;
-using PIMS.Infrastructure.Persistence.DbContexts;
 using PIMS.Web;
-using PIMS.Web.Common.Errors;
 using PIMS.Web.Extensions;
-using PIMS.Web.Filters;
-using PIMS.Web.Helpers;
-using PIMS.Web.Middleware;
-using Serilog;
-using Swashbuckle.AspNetCore.SwaggerGen;
-using System;
-using System.Net;
-using Vite.AspNetCore.Extensions;
-using DependencyInjection = PIMS.Web.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -70,7 +53,6 @@ var app = builder.Build();
     app.UseAuthentication();
 
     app.UseAuthorization();
-    app.UseMiddleware<ValidateAuthentication>();
 
     //app.UseStatusCodePages(async context => {
     //    var request = context.HttpContext.Request;

@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using PIMS.Application.Authentication;
 using PIMS.Application.Common.Behaviors;
 using System.Reflection;
 

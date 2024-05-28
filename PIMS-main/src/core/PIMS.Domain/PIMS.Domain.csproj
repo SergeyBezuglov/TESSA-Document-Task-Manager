@@ -12,10 +12,4 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0-preview.7.23375.6" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UserAggregate\Entities\" />
-    <Folder Include="UserAggregate\Enums\" />
-    <Folder Include="UserDataAggregate\Entities\" />
-  </ItemGroup>
-
 </Project>

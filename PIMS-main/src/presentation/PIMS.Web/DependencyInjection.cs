@@ -7,7 +7,6 @@ using PIMS.Web.Common.Mapping;
 using PIMS.Web.Extensions;
 using PIMS.Web.Helpers;
 using Swashbuckle.AspNetCore.SwaggerGen;
-using PIMS.Web.Middleware;
 using Vite.AspNetCore.Extensions;
 using System.Text.Json.Serialization;
 using PIMS.Infrastructure.Persistence.DbContexts;
@@ -63,7 +62,6 @@ namespace PIMS.Web
 
             services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
             services.AddSingleton<ProblemDetailsFactory, PIMSProblemDetailsFactory>();
-            services.AddSingleton<ValidateAuthentication>();
 
             services.Configure<ApiBehaviorOptions>(options =>
                options.SuppressModelStateInvalidFilter = true

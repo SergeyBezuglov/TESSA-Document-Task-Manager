@@ -1,37 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PIMS.Application.Common.Interfaces.Authentication;
 using PIMS.Application.Common.Interfaces.Persistence;
-using PIMS.Application.Common.Interfaces.Services;
-using PIMS.Application.Authentication;
-using PIMS.Infrastructure.Authentication;
-using PIMS.Infrastructure.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using PIMS.Infrastructure.Persistence.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using PIMS.Infrastructure.Persistence.Interceptors;
-using Microsoft.AspNetCore.Authentication;
-using System.Runtime.InteropServices;
-using System.DirectoryServices.Protocols;
-using System.Net;
 using System.Data;
-using Microsoft.Identity.Client;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Net.Http.Headers;
-using System.IdentityModel.Tokens.Jwt;
-using PIMS.Application.Common.Interfaces.Services.ActiveDirectory;
-using PIMS.Infrastructure.Persistence.Repositories.ActiveDirectory;
-using PIMS.Domain.Common.Authentication.Configuration;
 using PIMS.Infrastructure.Persistence.Repositories.Common;
-using Scrutor;
-using System.Drawing;
-using PIMS.Infrastructure.Persistence.Repositories.Cached;
-using MediatR;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
 using Serilog.Sinks.MSSqlServer;
@@ -39,8 +15,6 @@ using Serilog;
 using System.Collections.ObjectModel;
 using Serilog.Exceptions;
 using System.Reflection;
-
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using NpgsqlTypes;
 using Serilog.Sinks.PostgreSQL;
 using Microsoft.AspNetCore.Builder;
@@ -68,9 +42,6 @@ namespace PIMS.Infrastructure
         {
             services.AddPersistence(builder.Configuration, out string SelectedProvider,out string SelectedConnectionString);
             services.AddLogging(builder,SelectedProvider, SelectedConnectionString);
-            services.AddAuth(builder.Configuration);
-            services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
-            services.AddScoped<IActiveDirectoryUserProvider, ActiveDirectoryUserProvider>();
 
             return services;
         }
@@ -108,8 +79,6 @@ namespace PIMS.Infrastructure
 
             services.AddScoped<PublishDomainEventsInterceptor>();
             #region Репозитории
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddScoped<IUserDataRepository, UserDataRepository>();
             services.AddScoped<IProjectTaskRepository, ProjectTaskRepository>();
             services.AddScoped<IDocumentRepository, DocumentRepository>();
             #endregion Репозитории
@@ -212,141 +181,8 @@ namespace PIMS.Infrastructure
             builder.Logging.ClearProviders();
             builder.Logging.AddSerilog(Log.Logger);
         }
-        /// <summary>
-        /// Добавили авторизацию.
-        /// </summary>
-        /// <param name="services">Услуги.</param>
-        /// <param name="configuration">Конфигурация.</param>
-        /// <exception cref="Exception"></exception>
-        /// <returns>Возвращает значение сбора услуг (IServiceCollection).</returns>
-        private static IServiceCollection AddAuth(this IServiceCollection services, ConfigurationManager configuration)
-        {
-         
-
-            var jwtModuleOption = new JwtAuthenticationModuleOption();
-            configuration.Bind(JwtAuthenticationModuleOption.SectionName, jwtModuleOption);
-            configuration.GetSection(JwtAuthenticationModuleOption.SectionName);
-
-            if (string.IsNullOrEmpty(jwtModuleOption.Name))
-            {
-                throw new Exception($"Аутентификация с использованием Jwt обязательно должно присутствовать в appSettings.json, но параметр {JwtAuthenticationModuleOption.SectionName} не был обнаружен");
-            }
-            List<string> AuthSchemes = new List<string>() { JwtAuthenticationModuleOption.SchemeName };
-            var activeDirectoryModuleOption = new ActiveDirectoryAuthenticationModuleOption();
-            configuration.Bind(ActiveDirectoryAuthenticationModuleOption.SectionName, activeDirectoryModuleOption);
-            configuration.GetSection(ActiveDirectoryAuthenticationModuleOption.SectionName);
-            var authBuilder = services.AddAuthentication(options =>
-            {
-                 //options.DefaultScheme = JwtAuthenticationModuleOption.SchemeName;
-                 //options.DefaultChallengeScheme = string.IsNullOrEmpty(activeDirectoryModuleOption.Name)?
-                
-            });
-            authBuilder.AddJwtBearer(jwtModuleOption);
-            services.AddSingleton(Options.Create(jwtModuleOption));
-            if (!string.IsNullOrEmpty(activeDirectoryModuleOption.Name))
-            {
-                services.AddSingleton(Options.Create(activeDirectoryModuleOption));
-                authBuilder.AddNegotiate(activeDirectoryModuleOption);
-                if (!string.IsNullOrEmpty(activeDirectoryModuleOption.Name))
-                {
-                    AuthSchemes.Add(ActiveDirectoryAuthenticationModuleOption.SchemeName);
-                }
-            }
-            
-            services.AddAuthorization(AuthSchemes);
-            
-            services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();          
-            
-            return services;
-        }
-        /// <summary>
-        /// Добавили авторизацию.
-        /// </summary>
-        /// <param name="services">Услуги.</param>
-        /// <param name="AuthSchemes">Схемы аутентификации.</param>
-        /// <returns>Возвращает значение сбора услуг (IServiceCollection).</returns>
-        private static IServiceCollection AddAuthorization(this IServiceCollection services,List<string> AuthSchemes)
-        {
-            return services.AddAuthorization(options =>
-            {
-                //var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(AuthSchemes.ToArray());
-                //defaultAuthorizationPolicyBuilder =
-                //    defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
-                //options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
-            });
-
-        }
-        /// <summary>
-        /// Добавили носитель jwt.
-        /// </summary>
-        /// <param name="builder">Строитель.</param>
-        /// <param name="jwtModuleOption">Опция модуля jwt.</param>
-        /// <returns>Возвращает значение строителя аутентификации (AuthenticationBuilder).</returns>
-        private static AuthenticationBuilder AddJwtBearer(this AuthenticationBuilder builder, JwtAuthenticationModuleOption jwtModuleOption)
-        {
-          return  builder.AddJwtBearer(JwtAuthenticationModuleOption.SchemeName, options =>          
-          options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtModuleOption.Settings.Issuer,
-                ValidAudience = jwtModuleOption.Settings.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtModuleOption.Settings.Secret))
-            });
-        }
-        /// <summary>
-        /// Добавили переговоры.
-        /// </summary>
-        /// <param name="builder">Строитель.</param>
-        /// <param name="activeDirectoryModuleOption">Опция модуля активного каталога.</param>
-        /// <returns>Возвращает значение строителя аутентификации (AuthenticationBuilder).</returns>
-        private static AuthenticationBuilder AddNegotiate(this AuthenticationBuilder builder, ActiveDirectoryAuthenticationModuleOption activeDirectoryModuleOption)
-        {
-            return builder.AddNegotiate(ActiveDirectoryAuthenticationModuleOption.SchemeName, options =>
-            {
-                options.Events = new Microsoft.AspNetCore.Authentication.Negotiate.NegotiateEvents();
-                options.Events!.OnAuthenticated += context =>
-                {
-                    var d = context.Principal;
-                    // Do stuff here
-                    return Task.CompletedTask;
-                };
-                options.Events!.OnChallenge = challange =>
-                {
-                   
-                    return Task.CompletedTask;
-                };
-                options.Events!.OnAuthenticationFailed = context =>
-                {
-                    var mes = context.Exception.Message;
-                    return Task.CompletedTask;
-                };
-
-                options.EnableLdap(settings =>
-                {
-                    settings.Domain = activeDirectoryModuleOption.Settings.Domain!;
-                    if (!string.IsNullOrEmpty(activeDirectoryModuleOption.Settings.Host))
-                    {
-                        LdapConnection? ldapConnection = null;
-                        if (string.IsNullOrEmpty(activeDirectoryModuleOption.Settings.AccessDomainUserName))
-                        {
-                            ldapConnection = new LdapConnection(activeDirectoryModuleOption.Settings.Host);
-                        }
-                        else
-                        {
-                            ldapConnection = new LdapConnection(new LdapDirectoryIdentifier(activeDirectoryModuleOption.Settings.Host),
-                                new NetworkCredential(activeDirectoryModuleOption.Settings.AccessDomainUserName,
-                                activeDirectoryModuleOption.Settings.AccessDomainUserPassword), AuthType.Basic);
-                        }
-                        ldapConnection.SessionOptions.ReferralChasing = ReferralChasingOptions.None;
-                        settings.LdapConnection = ldapConnection;
-                    }
-                });
-
-            });
-        }
+        
+        
       
 
     }

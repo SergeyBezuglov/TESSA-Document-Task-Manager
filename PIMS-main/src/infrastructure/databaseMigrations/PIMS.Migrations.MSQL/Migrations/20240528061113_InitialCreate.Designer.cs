@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PIMS.Infrastructure.Persistence.DbContexts;
 
@@ -10,9 +11,11 @@ using PIMS.Infrastructure.Persistence.DbContexts;
 namespace PIMS.Migrations.MSQL.Migrations
 {
     [DbContext(typeof(PIMSDbContext))]
-    partial class PIMSDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240528061113_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

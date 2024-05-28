@@ -1,15 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PIMS.Domain;
-using PIMS.Domain.Common.Interfaces.Base;
-using PIMS.Domain.EventLogAggregate;
-using PIMS.Domain.UserAggregate;
-using PIMS.Domain.UserDataAggregate;
 using PIMS.Infrastructure.Persistence.Interceptors;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PIMS.Infrastructure.Persistence.DbContexts
 {
@@ -34,22 +25,10 @@ namespace PIMS.Infrastructure.Persistence.DbContexts
         {
             _publishDomainEventsInterceptor = publishDomainEventsInterceptor;
         }
-        /// <summary>
-        /// Пользователей.
-        /// </summary>
-        /// <value>Значение набора баз данных (DbSet).</value>
-        public DbSet<User> Users { get; set; } = null!;
+        
 
-        /// <summary>
-        /// Данные пользователя.
-        /// </summary>
-        /// <value>Значение набора баз данных (DbSet).</value>
-        public DbSet<UserData> UserData { get; set; } = null!;
-        /// <summary>
-        /// Журнал событий.
-        /// </summary>
-        /// <value>Значение набора баз данных (DbSet).</value>
-        public DbSet<EventLog> EventLog { get; set; } = null!;
+        
+       
         /// <summary>
         /// Таблица документов.
         /// </summary>
@@ -65,7 +44,7 @@ namespace PIMS.Infrastructure.Persistence.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.
-                Ignore<IList<IDomainEvent>>().
+                
                 ApplyConfigurationsFromAssembly(typeof(PIMSDbContext).Assembly);
             base.OnModelCreating(modelBuilder);
 
