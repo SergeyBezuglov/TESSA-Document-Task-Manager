@@ -127,9 +127,9 @@ namespace PIMS.Infrastructure
         .Enrich.FromLogContext()
         .Enrich.WithExceptionDetails()
         .Enrich.WithMachineName()
-        .Enrich.WithProperty("Assembly", $"{assembly.Version}"); 
-       
-            
+        .Enrich.WithProperty("Assembly", $"{assembly.Version}");
+
+
             if (dbProvider == DBProviderSettings.MSSQLServer)
             {
                 var ColumnOptions = new Serilog.Sinks.MSSqlServer.ColumnOptions
@@ -137,11 +137,11 @@ namespace PIMS.Infrastructure
 
                     AdditionalColumns = new Collection<SqlColumn>
                   {
-                     new SqlColumn {ColumnName =CustomLoggerExtensions.UserInfoCustomColumnName, PropertyName =CustomLoggerExtensions.UserInfoCustomColumnName, DataType = SqlDbType.NVarChar, DataLength = 500}                
+                     new SqlColumn {ColumnName =CustomLoggerExtensions.UserInfoCustomColumnName, PropertyName =CustomLoggerExtensions.UserInfoCustomColumnName, DataType = SqlDbType.NVarChar, DataLength = 500}
                   }
                 };
-            
-              
+
+
                 LoggerConfiguration.WriteTo.MSSqlServer(
               connectionString: connectionString,
               sinkOptions: new MSSqlServerSinkOptions
@@ -152,19 +152,20 @@ namespace PIMS.Infrastructure
 
               columnOptions: ColumnOptions);
             }
-
-            
-
-
-            Log.Logger = LoggerConfiguration.WriteTo.File(
-                new CompactJsonFormatter(),
-                Environment.CurrentDirectory + Path.Combine(Path.DirectorySeparatorChar.ToString(), "Logs", "log.json"),
-                rollingInterval: RollingInterval.Day,
-                restrictedToMinimumLevel: LogEventLevel.Information).CreateBootstrapLogger();
-            Serilog.Debugging.SelfLog.Enable(msg =>
+            if (dbProvider == DBProviderSettings.SQLite)
             {
-                Debug.Print(msg);                
-            });
+                LoggerConfiguration.WriteTo.SQLite(
+                    connectionString,
+                    tableName: "LogEvents",
+                    storeTimestampInUtc: true,
+                    restrictedToMinimumLevel: LogEventLevel.Information);
+            }
+
+
+
+
+            Log.Logger = LoggerConfiguration.CreateBootstrapLogger();
+            Serilog.Debugging.SelfLog.Enable(msg => Debug.WriteLine(msg));
             builder.Logging.ClearProviders();
             builder.Logging.AddSerilog(Log.Logger);
         }
