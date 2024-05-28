@@ -24,9 +24,9 @@ namespace PIMS.Infrastructure.Persistence.DbContexts
         /// </summary>
         public const string MSSQLServer = nameof(MSSQLServer);
         /// <summary>
-        /// Сервер PostgreSQL.
+        /// Сервер SQLLite
         /// </summary>
-        public const string PostgreSQLServer = nameof(PostgreSQLServer);
+        public const string SQLite= nameof(SQLite);
         /// <summary>
         /// Имя поставщика.
         /// </summary>

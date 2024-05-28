@@ -104,12 +104,11 @@ namespace PIMS.Infrastructure
                            x => x.MigrationsAssembly("PIMS.Migrations.MSQL")
                        );
             }
-            if (provider == DBProviderSettings.PostgreSQLServer)
+            if (provider == DBProviderSettings.SQLite)
             {
-                options.UseNpgsql(
-                    connectionString!,
-                    x => x.MigrationsAssembly("PIMS.Migrations.PostgreSQL")
-                );
+                options.UseSqlServer(connectionString!,
+                           x => x.MigrationsAssembly("PIMS.Migrations.SQLite")
+                       );
             }
         }
         /// <summary>
@@ -153,22 +152,10 @@ namespace PIMS.Infrastructure
 
               columnOptions: ColumnOptions);
             }
-            if (dbProvider == DBProviderSettings.PostgreSQLServer)
-            {
-                
-                LoggerConfiguration.WriteTo.PostgreSQL(connectionString, EventLogTableName,
-                    new Dictionary<string, ColumnWriterBase>
-                {
-                    {"Id", new RenderedMessageColumnWriter(NpgsqlDbType.Integer) },
-                    {"Message", new RenderedMessageColumnWriter(NpgsqlDbType.Text) },
-                    {"MessageTemplate", new MessageTemplateColumnWriter(NpgsqlDbType.Text) },
-                    {"Level", new LevelColumnWriter(true, NpgsqlDbType.Varchar) },
-                    {"TimeStamp", new TimestampColumnWriter(NpgsqlDbType.Timestamp) },
-                    {"Exception", new ExceptionColumnWriter(NpgsqlDbType.Text) },
-                    {"Properties", new LogEventSerializedColumnWriter(NpgsqlDbType.Jsonb) },
-                    {"UserInfo", new   SinglePropertyColumnWriter("UserInfo")  },
-                });
-            } 
+
+            
+
+
             Log.Logger = LoggerConfiguration.WriteTo.File(
                 new CompactJsonFormatter(),
                 Environment.CurrentDirectory + Path.Combine(Path.DirectorySeparatorChar.ToString(), "Logs", "log.json"),

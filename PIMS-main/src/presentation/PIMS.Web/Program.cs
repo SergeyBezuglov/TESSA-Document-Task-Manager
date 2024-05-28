@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Nest;
 using PIMS.Application;
 using PIMS.Infrastructure;
 using PIMS.Web;
@@ -11,17 +10,15 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 
 
 });
-var settings = new ConnectionSettings(new Uri("http://localhost:5173")) // Укажите правильный URI к вашему Elasticsearch
-    .DefaultIndex("index.html"); // Укажите индекс по умолчанию
 
-var client = new ElasticClient(settings);
-builder.Services.AddSingleton<IElasticClient>(client);
-{   
+
+
+ 
     builder.Services.
     AddPresentation(builder).
     AddApplication().
     AddInfrastracture(builder); 
-}
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("MyAllowSpecificOrigins", policy =>

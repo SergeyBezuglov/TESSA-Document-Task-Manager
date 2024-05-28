@@ -25,10 +25,6 @@ namespace PIMS.Infrastructure.Persistence.DbContexts
         {
             _publishDomainEventsInterceptor = publishDomainEventsInterceptor;
         }
-        
-
-        
-       
         /// <summary>
         /// Таблица документов.
         /// </summary>
