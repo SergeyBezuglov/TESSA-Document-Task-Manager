@@ -16,7 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\src\infrastructure\PIMS.Infrastructure\PIMS.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\PIMS.Infrastructure\PIMS.Infrastructure.csproj" />
 	</ItemGroup>
 
 	
