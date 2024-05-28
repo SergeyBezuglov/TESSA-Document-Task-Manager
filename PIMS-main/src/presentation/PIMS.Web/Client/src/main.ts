@@ -4,11 +4,11 @@ import '@fortawesome/fontawesome-free/js/all.js'
 import 'vuetify/styles'
 
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
+
 
 // @ts-ignore
 import App from './App.vue'
-import router from './router'
+
 
 import { createVuetify, type ThemeDefinition } from 'vuetify'
 import * as components from 'vuetify/components'
@@ -54,11 +54,11 @@ const vuetify = createVuetify({
   }
 })
 
-const pinia = createPinia();
+
 const app = createApp(App)
 
-app.use(pinia)
-app.use(router)
+
+
 app.use(vuetify)
 
 app.mount('#app')
