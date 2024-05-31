@@ -142,9 +142,5 @@ namespace PIMS.Infrastructure
             builder.Logging.ClearProviders();
             builder.Logging.AddSerilog(Log.Logger);
         }
-        
-        
-      
-
     }
 }
