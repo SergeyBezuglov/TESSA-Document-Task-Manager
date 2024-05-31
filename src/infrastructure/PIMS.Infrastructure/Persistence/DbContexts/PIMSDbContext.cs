@@ -51,6 +51,11 @@ namespace PIMS.Infrastructure.Persistence.DbContexts
         /// <param name="optionsBuilder">Конструктор опции.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlite("Data Source=./PIMS.db");
+            }
+
             optionsBuilder.AddInterceptors(_publishDomainEventsInterceptor);
             base.OnConfiguring(optionsBuilder);
         }

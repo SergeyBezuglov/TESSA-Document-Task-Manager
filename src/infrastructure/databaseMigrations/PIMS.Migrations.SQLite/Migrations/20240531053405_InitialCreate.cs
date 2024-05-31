@@ -14,9 +14,9 @@ namespace PIMS.Migrations.SQLite.Migrations
                 name: "Documents",
                 columns: table => new
                 {
-                    ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    ActiveTaskID = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    ID = table.Column<string>(type: "TEXT", nullable: false),
+                    Status = table.Column<string>(type: "TEXT", maxLength: 50, nullable: false),
+                    ActiveTaskID = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -27,10 +27,10 @@ namespace PIMS.Migrations.SQLite.Migrations
                 name: "ProjectTasks",
                 columns: table => new
                 {
-                    ID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    PreviousTaskID = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    DocumentID = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ID = table.Column<string>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", maxLength: 255, nullable: false),
+                    PreviousTaskID = table.Column<string>(type: "TEXT", nullable: true),
+                    DocumentID = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -53,8 +53,7 @@ namespace PIMS.Migrations.SQLite.Migrations
                 name: "IX_Documents_ActiveTaskID",
                 table: "Documents",
                 column: "ActiveTaskID",
-                unique: true,
-                filter: "[ActiveTaskID] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProjectTasks_DocumentID",
@@ -65,8 +64,7 @@ namespace PIMS.Migrations.SQLite.Migrations
                 name: "IX_ProjectTasks_PreviousTaskID",
                 table: "ProjectTasks",
                 column: "PreviousTaskID",
-                unique: true,
-                filter: "[PreviousTaskID] IS NOT NULL");
+                unique: true);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Documents_ProjectTasks_ActiveTaskID",

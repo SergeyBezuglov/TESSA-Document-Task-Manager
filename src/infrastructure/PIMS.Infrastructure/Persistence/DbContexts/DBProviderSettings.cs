@@ -19,10 +19,7 @@ namespace PIMS.Infrastructure.Persistence.DbContexts
         /// Имя поставщика является аргументом командной строки.
         /// </summary>
         public const string ProviderNameArgsForCommandLine = "ProviderName";
-        /// <summary>
-        /// Сервер MSSQL.
-        /// </summary>
-        public const string MSSQLServer = nameof(MSSQLServer);
+       
         /// <summary>
         /// Сервер SQLLite
         /// </summary>

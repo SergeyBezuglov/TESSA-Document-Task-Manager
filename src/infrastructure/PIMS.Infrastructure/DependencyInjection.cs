@@ -98,15 +98,10 @@ namespace PIMS.Infrastructure
         /// <param name="connectionString">Строка подключения.</param>
         private static void DatabaseProviderConfiguration(this DbContextOptionsBuilder options,string provider,string connectionString)
         {
-            if (provider == DBProviderSettings.MSSQLServer)
-            {
-                options.UseSqlServer(connectionString!,
-                           x => x.MigrationsAssembly("PIMS.Migrations.MSQL")
-                       );
-            }
+            
             if (provider == DBProviderSettings.SQLite)
             {
-                options.UseSqlServer(connectionString!,
+                options.UseSqlite(connectionString!,
                            x => x.MigrationsAssembly("PIMS.Migrations.SQLite")
                        );
             }
@@ -130,28 +125,6 @@ namespace PIMS.Infrastructure
         .Enrich.WithProperty("Assembly", $"{assembly.Version}");
 
 
-            if (dbProvider == DBProviderSettings.MSSQLServer)
-            {
-                var ColumnOptions = new Serilog.Sinks.MSSqlServer.ColumnOptions
-                {
-
-                    AdditionalColumns = new Collection<SqlColumn>
-                  {
-                     new SqlColumn {ColumnName =CustomLoggerExtensions.UserInfoCustomColumnName, PropertyName =CustomLoggerExtensions.UserInfoCustomColumnName, DataType = SqlDbType.NVarChar, DataLength = 500}
-                  }
-                };
-
-
-                LoggerConfiguration.WriteTo.MSSqlServer(
-              connectionString: connectionString,
-              sinkOptions: new MSSqlServerSinkOptions
-              {
-
-                  TableName = EventLogTableName,
-              },
-
-              columnOptions: ColumnOptions);
-            }
             if (dbProvider == DBProviderSettings.SQLite)
             {
                 LoggerConfiguration.WriteTo.SQLite(

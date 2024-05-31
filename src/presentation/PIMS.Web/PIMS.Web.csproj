@@ -8,7 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="Mapster" Version="7.4.0-pre06" />
     <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1-pre02" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Versioning" Version="5.1.0" />
@@ -25,9 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\PIMS.Migrations.SQLite\PIMS.Migrations.SQLite.csproj" />
     <ProjectReference Include="..\..\core\PIMS.Application\PIMS.Application.csproj" />
-    <ProjectReference Include="..\..\infrastructure\databaseMigrations\PIMS.Migrations.MSQL\PIMS.Migrations.MSQL.csproj" />
+    <ProjectReference Include="..\..\infrastructure\databaseMigrations\PIMS.Migrations.SQLite\PIMS.Migrations.SQLite.csproj" />
     <ProjectReference Include="..\..\infrastructure\PIMS.Infrastructure\PIMS.Infrastructure.csproj" />
     <ProjectReference Include="..\PIMS.Contracts\PIMS.Contracts.csproj" />
   </ItemGroup>
